@@ -5,6 +5,7 @@
  
 #if defined( HAS_PPM_INPUT) && defined(PLATFORM_ESP32)
 static PPMReader *ppmReader=nullptr;
+extern bool webserverPreventAutoStart;
 
 static void initPPM()
 {
@@ -26,12 +27,21 @@ static int start()
 //time out update connection status
 static int timeout()
 {
-    return DURATION_IMMEDIATELY;
+
+    return DURATION_IGNORE;
 }
 
 //event triger by main ,recv & parse ppm data 
 static int  event()
 {
+    if(!ppmReader->isActive())
+    {
+        DBGLN("PPM lost set wifi on ");
+        webserverPreventAutoStart=false;
+    }else{
+        webserverPreventAutoStart=true;
+        DBGLN("PPM ACTIVE");
+    }
     return DURATION_IGNORE;
   //get value from ppmreader to ChannelData
 }
