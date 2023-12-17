@@ -14,9 +14,9 @@
 #include "logging.h"
 
 
-#define PPM_RESOLUTION_NS 1000 // 1uS TICK
-#define PPM_MIN_SYMBOL_TICKS  10  //   10us
-#define PPM_MAX_SYMBOL_TICKS  2200 //  3ms max
+#define PPM_RESOLUTION_NS 100 // 1uS TICK
+#define PPM_MIN_SYMBOL_TICKS  200  //   10us
+#define PPM_MAX_SYMBOL_TICKS  22000 //  3ms max
 
 extern "C" void receive_process(uint32_t *data, size_t len, void * arg);
 
@@ -56,7 +56,7 @@ class PPMReader {
         }
         for (size_t i = 0; i<len-1; i++) {
         // DBGLN("PPM CHANNEL VALUE %d [%d | %d | %d | %d]",i,data[i].level0 ,data[i].duration0,data[i].level1,data[i].duration1);
-        uint16_t value= (data[i].duration1 + data[i+1].duration0);
+        uint16_t value= (data[i].duration1 + data[i+1].duration0)/10;
         if(value > 900 && value < 2250){
             ChannelData[i]=fmap(value,1000,2000,CRSF_CHANNEL_VALUE_MIN,CRSF_CHANNEL_VALUE_MAX);
         }
