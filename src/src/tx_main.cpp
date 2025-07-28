@@ -20,7 +20,9 @@
 #include "devThermal.h"
 #include "devPDET.h"
 #include "devBackpack.h"
+#if defined(PLATFORM_ESP32)
 #include "devPPM.h"
+#endif
 
 //// CONSTANTS ////
 #define MSP_PACKET_SEND_INTERVAL 10LU
